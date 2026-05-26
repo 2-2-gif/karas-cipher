@@ -20,13 +20,23 @@ Karas-Cipher is an innovative symmetric cipher system based on the principles of
 ## Usage
 
 Karas-Cipher is designed to integrate seamlessly into your Python projects.
-
+to encode:
 ```python
 import karas_cipher_encoder
 
 # Plaintext to be encoded
-text = ""
+text = "" # example: empty text
 
 # Encrypting
-encrypted = karas_cipher_encrypt(text)
+encrypted = karas_cipher_encoder.karas_cipher_encrypt(text)
 print(f"Encrypted output: {encrypted}")
+```
+to decode:
+```python
+import karas_cipher_encoder
+
+# plaintext
+text = "" # example: empty text
+decrypted = karas_cipher_encoder.karas_cipher_decrypt(karas_cipher_encoder.karas_cipher_encrypt(text))
+print(f"Decrypted Output: {decrypted}")
+```
