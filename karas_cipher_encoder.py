@@ -6,13 +6,11 @@ def karas_cipher_encrypt(text):
     combined_constants = sorted([h_int, f_int], reverse=True)
     encrypted_text = ""
     for char in text:
-        shifted_char = ord(char) + 2
+        val = ord(char)
         for const in combined_constants:
-            shift_amount = (const % 8) + 1
-            shifted_char = ((shifted_char << shift_amount) | (shifted_char >> (8 - shift_amount))) & 0xFF
-        if not (32 <= shifted_char <= 126):
-            shifted_char = 32 + (shifted_char % 95)
-        encrypted_text += chr(shifted_char)
+            shift = (const % 7) + 1
+            val = ((val << shift) | (val >> (8 - shift))) & 0xFF
+        encrypted_text += chr(val)
     return encrypted_text
 
 def karas_cipher_decrypt(text):
@@ -23,11 +21,10 @@ def karas_cipher_decrypt(text):
     combined_constants = sorted([h_int, f_int], reverse=True)
     decrypted_text = ""
     for char in text:
-        shifted_char = ord(char)
-        if not (32 <= shifted_char <= 126):
-             shifted_char = 32 + (shifted_char % 95)
+        val = ord(char)
         for const in reversed(combined_constants):
-            shift_amount = (const % 8) + 1
-            shifted_char = ((shifted_char >> shift_amount) | (shifted_char << (8 - shift_amount))) & 0xFF
-        decrypted_text += chr(shifted_char - 2)
+            shift = (const % 7) + 1
+            val = ((val >> shift) | (val << (8 - shift))) & 0xFF
+        decrypted_text += chr(val)
     return decrypted_text
+    
