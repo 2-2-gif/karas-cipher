@@ -1,24 +1,40 @@
+KARAS_MAP = r' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~'
 
-file_bytes = bytes.fromhex("025F8D1C4EA239BB741A5C990D2F41")
-hash_val = bytes.fromhex("9A6EC012E1A7DA9DBE34194d478AD7C0DB1822FB071DF12981496ED104384113")
-h_int = int.from_bytes(hash_val, 'big')
-f_int = int.from_bytes(file_bytes, 'big')
-rol_const = ((((h_int ^ f_int) << 5) | ((h_int ^ f_int) >> 155)) & 0xFF) % 8
+def karas_to_code(char):
+    for i, c in enumerate(KARAS_MAP):
+        if c == char:
+            return i + 33
+    return 33
+
+def code_to_karas(code):
+    index = code - 33
+    if 0 <= index < len(KARAS_MAP):
+        return KARAS_MAP[index]
+    return KARAS_MAP[0]
 
 def karas_cipher_encrypt(text):
     o = ""
+    shift = 1 
     for c in text:
-        val = (ord(c) + 2) & 0xFF
-        v = ((val << 1) | (val >> 7)) & 0xFF
-        v = v ^ (rol_const + 32)
-        o += chr(v)
+        val = karas_to_code(c)
+        v = val + shift
+        while v > 126:
+            v -= 94
+        o += code_to_karas(v)
+        shift += 1
+        if shift > 94: shift = 1
     return o
 
 def karas_cipher_decrypt(text):
     d = ""
+    shift = 1
     for c in text:
-        v = ord(c)
-        v = v ^ (rol_const + 32)
-        v = ((v >> 1) | (v << 7)) & 0xFF
-        d += chr((v - 2) & 0xFF)
+        val = karas_to_code(c)
+        v = val - shift
+        while v < 33:
+            v += 94
+        d += code_to_karas(v)
+        shift += 1
+        if shift > 94: shift = 1
     return d
+    
