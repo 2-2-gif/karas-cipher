@@ -22,7 +22,10 @@ def karas_cipher_encrypt(text):
             v -= 94
         o += code_to_karas(v)
         shift += 1
-        if shift > 94: shift = 1
+        if len(text) <= 94:
+        	if shift > len(text): shift = 1
+        else:
+        	if shift > 94: shift = 1
     return o
 
 def karas_cipher_decrypt(text):
@@ -35,6 +38,8 @@ def karas_cipher_decrypt(text):
             v += 94
         d += code_to_karas(v)
         shift += 1
-        if shift > 94: shift = 1
+        if len(text) <= 94:
+        	if shift > len(text): shift = 1
+        else:
+        	if shift > 94: shift = 1
     return d
-    
